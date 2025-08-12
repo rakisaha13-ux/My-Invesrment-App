@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutual Fund SIP Investment Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F4F8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .stat-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 24px;
+            border-radius: 0.75rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h3 class="text-2xl md:text-3xl font-semibold text-[#003F5C] mb-2">Hello, Mr. Soumen!</h3>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#003F5C] mb-2">Optimizing Your ₹15,000 Monthly SIP</h1>
+            <p class="text-lg text-gray-600">A Visual Guide to Long-Term Wealth Creation Over 10-15 Years</p>
+        </header>
+
+        <section id="power-of-sip" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#003F5C]">The Strategic Advantage of SIPs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="stat-card text-center">
+                    <div class="text-4xl mb-2">📈</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#2F4B7C]">Disciplined Investing</h3>
+                    <p class="text-gray-600">Automates regular investments, removing emotion and preventing market timing mistakes.</p>
+                </div>
+                <div class="stat-card text-center">
+                    <div class="text-4xl mb-2">⚖️</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#2F4B7C]">Rupee Cost Averaging</h3>
+                    <p class="text-gray-600">Buy more units when prices are low and fewer when high, reducing average cost over time.</p>
+                </div>
+                <div class="stat-card text-center">
+                    <div class="text-4xl mb-2">🚀</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#2F4B7C]">Power of Compounding</h3>
+                    <p class="text-gray-600">Reinvested returns generate their own returns, leading to exponential growth over the long term.</p>
+                </div>
+                <div class="stat-card text-center">
+                    <div class="text-4xl mb-2">⚙️</div>
+                    <h3 class="text-xl font-bold mb-2 text-[#2F4B7C]">Flexibility</h3>
+                    <p class="text-gray-600">Easily modify your SIP amount or use Step-up SIPs to align with your growing income.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="returns-calculator" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-center mb-6 text-[#003F5C]">Mutual Fund Return Calculator</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-700 font-medium">Monthly SIP Amount</label>
+                            <span id="investment-value" class="font-bold text-xl text-[#003F5C]">₹25,000</span>
+                        </div>
+                        <input type="range" id="investment-slider" min="1000" max="200000" value="25000" step="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-700 font-medium">Expected Return Rate (p.a)</label>
+                            <span id="return-rate-value" class="font-bold text-xl text-[#003F5C]">12%</span>
+                        </div>
+                        <input type="range" id="return-rate-slider" min="1" max="30" value="12" step="0.5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-700 font-medium">Time period</label>
+                            <span id="time-period-value" class="font-bold text-xl text-[#003F5C]">10 Yr</span>
+                        </div>
+                        <input type="range" id="time-period-slider" min="1" max="30" value="10" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    
+                    <div class="flex justify-between items-center font-semibold mt-8 text-lg">
+                        <span>Invested amount</span>
+                        <span id="invested-amount-display" class="text-right">₹25,000</span>
+                    </div>
+                    <div class="flex justify-between items-center font-semibold text-lg">
+                        <span>Est. returns</span>
+                        <span id="estimated-returns-display" class="text-right text-[#FF6361]">₹52,646</span>
+                    </div>
+                    <div class="flex justify-between items-center font-bold text-xl pt-2 border-t border-gray-300">
+                        <span>Total value</span>
+                        <span id="total-value-display" class="text-right text-[#003F5C]">₹77,646</span>
+                    </div>
+                </div>
+
+                <div class="chart-container h-80 md:h-96">
+                    <canvas id="returnsDoughnutChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="compounding-effect" class="mb-16 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-center mb-2 text-[#003F5C]">The Compounding Effect in Action</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">This chart illustrates the exponential growth of a ₹15,000 monthly SIP over 15 years at different potential annualized returns. Notice how the growth accelerates significantly in the later years, showcasing the true power of compounding.</p>
+            <div class="chart-container h-[400px] md:h-[500px] max-w-4xl">
+                <canvas id="compoundingChart"></canvas>
+            </div>
+        </section>
+
+        <section id="portfolio-allocation" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#003F5C]">Strategic Portfolio Allocation</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="text-center md:text-left">
+                    <p class="text-lg text-gray-600 mb-4">A diversified portfolio is key to balancing risk and reward. For a 10-15 year horizon, a strategic mix across different fund categories is recommended. This approach captures growth from multiple market segments while mitigating volatility.</p>
+                    <ul class="text-left space-y-2 text-gray-700">
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3 bg-[#665191]"></span><strong>Flexi-Cap (40-50%):</strong> Core of the portfolio for stability and dynamic growth.</li>
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3 bg-[#A05195]"></span><strong>Mid-Cap (30-40%):</strong> For higher growth potential from emerging market leaders.</li>
+                        <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3 bg-[#D45087]"></span><strong>Small-Cap (10-20%):</strong> For aggressive growth, suitable for high-risk appetites.</li>
+                    </ul>
+                </div>
+                <div class="chart-container h-80 md:h-96">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="fund-performance" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#003F5C]">Top-Tier Fund Performance Comparison</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">Here's a look at the historical 5-year and 10-year annualized returns (<span class="font-bold text-blue-600 cursor-pointer" onclick="showExplanation('CAGR')">CAGR ✨</span>) of recommended funds. This comparison helps in understanding their long-term performance and consistency across different market cycles.</p>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="chart-container h-[450px] md:h-[500px] max-w-4xl">
+                    <canvas id="fundPerformanceChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <section id="projected-growth" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#003F5C]">Projected Corpus Over 15 Years</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">With a consistent monthly SIP of ₹15,000, your total investment over 15 years will be ₹27 lakhs. Here’s a projection of the potential final corpus you could accumulate based on different average annual return rates.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="stat-card text-center border-t-4 border-[#FFA600]">
+                    <h3 class="text-xl font-bold text-gray-700">Conservative Growth</h3>
+                    <p class="text-5xl font-extrabold text-[#FFA600] my-4">₹75.9 Lakhs</p>
+                    <p class="text-gray-600">at <span class="font-bold">12%</span> CAGR</p>
+                </div>
+                <div class="stat-card text-center border-t-4 border-[#FF6361]">
+                    <h3 class="text-xl font-bold text-gray-700">Moderate Growth</h3>
+                    <p class="text-5xl font-extrabold text-[#FF6361] my-4">₹84.8 Lakhs</p>
+                    <p class="text-gray-600">at <span class="font-bold">14%</span> CAGR</p>
+                </div>
+                <div class="stat-card text-center border-t-4 border-[#BC5090]">
+                    <h3 class="text-xl font-bold text-gray-700">Aggressive Growth</h3>
+                    <p class="text-5xl font-extrabold text-[#BC5090] my-4">₹1.01 Crore</p>
+                    <p class="text-gray-600">at <span class="font-bold">16%</span> CAGR</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="personalized-advice" class="mb-16 bg-white rounded-lg shadow-md p-6 text-center">
+            <h2 class="text-3xl font-bold mb-4 text-[#003F5C]">Get a Personalized Strategy ✨</h2>
+            <p class="text-gray-600 mb-6">Tell us a bit about your investment profile, and we'll generate a custom SIP strategy for you.</p>
+            <button id="openAdvisorModalBtn" class="bg-[#FFA600] text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-[#FF6361] transition-colors">
+                Generate My Strategy
+            </button>
+        </section>
+
+        <div id="advisorModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3 class="text-2xl font-bold text-[#003F5C] mb-4">Personalized SIP Advisor</h3>
+                <form id="advisorForm" class="space-y-4">
+                    <div>
+                        <label for="age" class="block text-gray-700 font-medium mb-1">Your Age:</label>
+                        <input type="number" id="age" name="age" class="w-full border-gray-300 rounded-md p-2" required>
+                    </div>
+                    <div>
+                        <label for="risk" class="block text-gray-700 font-medium mb-1">Risk Tolerance:</label>
+                        <select id="risk" name="risk" class="w-full border-gray-300 rounded-md p-2" required>
+                            <option value="low">Low</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="goal" class="block text-gray-700 font-medium mb-1">Financial Goal:</label>
+                        <textarea id="goal" name="goal" rows="3" class="w-full border-gray-300 rounded-md p-2" placeholder="e.g., Save for retirement, child's education, buy a house" required></textarea>
+                    </div>
+                    <button type="submit" id="submitAdvisorBtn" class="bg-[#2F4B7C] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#003F5C] transition-colors w-full">
+                        Get My Strategy ✨
+                    </button>
+                </form>
+                <div id="advisorResponse" class="mt-6 p-4 bg-gray-100 rounded-md hidden">
+                    <h4 class="text-xl font-semibold mb-2">Your Custom Strategy:</h4>
+                    <p id="responseContent" class="text-gray-700"></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="explanationModal" class="modal">
+            <div class="modal-content max-w-sm">
+                <span class="close-button">&times;</span>
+                <h3 id="explanationTitle" class="text-2xl font-bold text-[#003F5C] mb-2"></h3>
+                <p id="explanationContent" class="text-gray-700"></p>
+            </div>
+        </div>
+
+        <footer class="text-center mt-12 pt-8 border-t border-gray-300">
+            <p class="text-sm text-gray-500 mt-2"><strong>Morgan Stanley</strong></p>
+            <p class="text-gray-600"><strong>Disclaimer:</strong> Mutual fund investments are subject to market risks. Past performance is not indicative of future results. Please consult a financial advisor before making any investment decisions.</p>
+            <p class="text-sm text-gray-500 mt-2">Infographic based on the report "Optimizing Your ₹15,000/Month SIP for 10-15 Years".</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const wrapLabel = (label) => {
+            const maxLength = 16;
+            if (label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            words.forEach(word => {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const colors = {
+            purple: '#665191',
+            magenta: '#A05195',
+            pink: '#D45087',
+            rose: '#F9777F',
+            orange: '#FF9F6A',
+            yellow: '#FFC56E',
+            darkBlue: '#003f5c',
+            blue: '#2f4b7c',
+            red: '#ff6361',
+            anotherPink: '#bc5090',
+            anotherOrange: '#ffa600'
+        };
+
+        const compoundingData = {
+            labels: Array.from({ length: 16 }, (_, i) => `Year ${i}`),
+            datasets: [
+                {
+                    label: 'Growth at 12% CAGR',
+                    data: [],
+                    borderColor: colors.anotherOrange,
+                    backgroundColor: 'rgba(255, 166, 0, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Growth at 14% CAGR',
+                    data: [],
+                    borderColor: colors.red,
+                    backgroundColor: 'rgba(255, 99, 97, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Growth at 16% CAGR',
+                    data: [],
+                    borderColor: colors.anotherPink,
+                    backgroundColor: 'rgba(188, 80, 144, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        };
+
+        const monthlyInvestment = 15000;
+        const rates = [0.12, 0.14, 0.16];
+        rates.forEach((rate, index) => {
+            let futureValue = 0;
+            compoundingData.datasets[index].data.push(0);
+            for (let year = 1; year <= 15; year++) {
+                let monthlyRate = rate / 12;
+                let numMonths = year * 12;
+                let sipAmount = monthlyInvestment;
+                futureValue = sipAmount * ((Math.pow(1 + monthlyRate, numMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+                compoundingData.datasets[index].data.push(futureValue);
+            }
+        });
+
+        new Chart(document.getElementById('compoundingChart'), {
+            type: 'line',
+            data: compoundingData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₹' + (value / 100000).toFixed(1) + 'L';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        const allocationData = {
+            labels: ['Flexi-Cap Funds', 'Mid-Cap Funds', 'Small-Cap Funds'],
+            datasets: [{
+                label: 'Portfolio Allocation',
+                data: [45, 35, 20],
+                backgroundColor: [colors.purple, colors.magenta, colors.pink],
+                hoverOffset: 4
+            }]
+        };
+
+        new Chart(document.getElementById('allocationChart'), {
+            type: 'doughnut',
+            data: allocationData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                           title: tooltipTitleCallback
+                        }
+                    }
+                }
+            }
+        });
+        
+        const fundPerformanceData = {
+            labels: [
+                wrapLabel('Parag Parikh Flexi Cap'), 
+                wrapLabel('HDFC Flexi Cap'), 
+                wrapLabel('Invesco India Midcap'), 
+                wrapLabel('Motilal Oswal Midcap'), 
+                wrapLabel('Quant Small Cap'), 
+                wrapLabel('Nippon India Small Cap')
+            ],
+            datasets: [{
+                label: '5-Year CAGR (%)',
+                data: [22.67, 16.57, 20, 35.1, 36.96, 34.88],
+                backgroundColor: colors.blue,
+                borderColor: colors.blue,
+                borderWidth: 1
+            }, {
+                label: '10-Year CAGR (%)',
+                data: [18.99, 14.15, 19.31, 19.16, 19.99, 22.84],
+                backgroundColor: colors.anotherPink,
+                borderColor: colors.anotherPink,
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(document.getElementById('fundPerformanceChart'), {
+            type: 'bar',
+            data: fundPerformanceData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Annualized Returns (CAGR %)'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        const advisorModal = document.getElementById('advisorModal');
+        const openAdvisorModalBtn = document.getElementById('openAdvisorModalBtn');
+        const closeButtons = document.querySelectorAll('.close-button');
+        const advisorForm = document.getElementById('advisorForm');
+        const advisorResponse = document.getElementById('advisorResponse');
+        const responseContent = document.getElementById('responseContent');
+        const explanationModal = document.getElementById('explanationModal');
+        const explanationTitle = document.getElementById('explanationTitle');
+        const explanationContent = document.getElementById('explanationContent');
+
+        openAdvisorModalBtn.onclick = function() {
+            advisorModal.style.display = 'flex';
+        }
+
+        closeButtons.forEach(btn => {
+            btn.onclick = function() {
+                btn.closest('.modal').style.display = 'none';
+            }
+        });
+
+        window.onclick = function(event) {
+            if (event.target == advisorModal) {
+                advisorModal.style.display = 'none';
+            }
+            if (event.target == explanationModal) {
+                explanationModal.style.display = 'none';
+            }
+        }
+
+        async function getLLMResponse(prompt) {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            
+            let response;
+            let retryCount = 0;
+            const maxRetries = 5;
+            const initialDelay = 1000;
+
+            while (retryCount < maxRetries) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) {
+                        retryCount++;
+                        const delay = initialDelay * Math.pow(2, retryCount);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        return text;
+                    } else {
+                        throw new Error('Unexpected API response structure or content missing.');
+                    }
+                } catch (error) {
+                    console.error('API call failed:', error);
+                    throw error;
+                }
+            }
+            throw new Error('API call failed after multiple retries.');
+        }
+
+        advisorForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const age = document.getElementById('age').value;
+            const risk = document.getElementById('risk').value;
+            const goal = document.getElementById('goal').value;
+            
+            const submitButton = document.getElementById('submitAdvisorBtn');
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Generating...';
+
+            const prompt = `Based on the following investor profile:
+            - Age: ${age}
+            - Risk Tolerance: ${risk}
+            - Financial Goal: ${goal}
+            
+            Provide a personalized SIP investment strategy for a ₹15,000 monthly SIP, with a horizon of 10-15 years. Suggest a portfolio allocation across different fund categories (Large-Cap, Mid-Cap, Small-Cap, Flexi-Cap), and explain the reasoning behind the recommendation in a simple, easy-to-understand way. Do not mention specific fund names, and start the response with "Based on your profile, here is a personalized SIP strategy:"`;
+
+            try {
+                const response = await getLLMResponse(prompt);
+                responseContent.innerHTML = response.replace(/\n/g, '<br>');
+                advisorResponse.style.display = 'block';
+            } catch (error) {
+                let fallbackMessage = '';
+                if (risk === 'low') {
+                    fallbackMessage = 'For a manual approach, consider a balanced portfolio of 80% Flexi-Cap, 15% Mid-Cap, and 5% Small-Cap funds to prioritise stability while still capturing some growth.';
+                } else if (risk === 'moderate') {
+                    fallbackMessage = 'For a manual approach, consider a balanced portfolio of 60% Flexi-Cap, 25% Mid-Cap, and 15% Small-Cap funds to aim for steady growth with manageable volatility.';
+                } else if (risk === 'high') {
+                    fallbackMessage = 'For a manual approach, consider a balanced portfolio of 40% Flexi-Cap, 35% Mid-Cap, and 25% Small-Cap funds to maximise long-term growth while accepting higher short-term fluctuations.';
+                }
+                responseContent.textContent = fallbackMessage;
+                advisorResponse.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Get My Strategy ✨';
+            }
+        });
+
+        async function showExplanation(term) {
+            explanationTitle.textContent = term.toUpperCase();
+            explanationContent.textContent = 'Generating explanation...';
+            explanationModal.style.display = 'flex';
+            
+            const prompt = `Explain the financial term "${term}" in simple, easy-to-understand language for a beginner investor. Keep the explanation concise and focused on its relevance to mutual funds and SIPs.`;
+
+            try {
+                const response = await getLLMResponse(prompt);
+                explanationContent.textContent = response;
+            } catch (error) {
+                explanationContent.textContent = 'Please try again later.';
+            }
+        }
+        
+        const investmentSlider = document.getElementById('investment-slider');
+        const returnRateSlider = document.getElementById('return-rate-slider');
+        const timePeriodSlider = document.getElementById('time-period-slider');
+        const investedAmountDisplay = document.getElementById('invested-amount-display');
+        const estimatedReturnsDisplay = document.getElementById('estimated-returns-display');
+        const totalValueDisplay = document.getElementById('total-value-display');
+        const investmentValue = document.getElementById('investment-value');
+        const returnRateValue = document.getElementById('return-rate-value');
+        const timePeriodValue = document.getElementById('time-period-value');
+
+        let returnsDoughnutChart = null;
+
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value);
+        };
+
+        const calculateReturns = () => {
+            const monthlyInvestment = parseFloat(investmentSlider.value);
+            const annualRate = parseFloat(returnRateSlider.value) / 100;
+            const timeInYears = parseFloat(timePeriodSlider.value);
+
+            const investedAmount = monthlyInvestment * 12 * timeInYears;
+            const monthlyRate = annualRate / 12;
+            const numMonths = timeInYears * 12;
+
+            const futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, numMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+            const estimatedReturns = futureValue - investedAmount;
+
+            investmentValue.textContent = formatCurrency(monthlyInvestment);
+            returnRateValue.textContent = `${returnRateSlider.value}%`;
+            timePeriodValue.textContent = `${timePeriodSlider.value} Yr`;
+
+            investedAmountDisplay.textContent = formatCurrency(investedAmount);
+            estimatedReturnsDisplay.textContent = formatCurrency(estimatedReturns);
+            totalValueDisplay.textContent = formatCurrency(futureValue);
+
+            if (returnsDoughnutChart) {
+                returnsDoughnutChart.data.datasets[0].data = [investedAmount, estimatedReturns];
+                returnsDoughnutChart.update();
+            }
+        };
+
+        const setupReturnsCalculator = () => {
+            const ctx = document.getElementById('returnsDoughnutChart').getContext('2d');
+            returnsDoughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Invested amount', 'Est. returns'],
+                    datasets: [{
+                        data: [15000 * 12 * 10, 3790527], 
+                        backgroundColor: [colors.darkBlue, colors.red],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += formatCurrency(context.parsed);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            investmentSlider.addEventListener('input', calculateReturns);
+            returnRateSlider.addEventListener('input', calculateReturns);
+            timePeriodSlider.addEventListener('input', calculateReturns);
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupReturnsCalculator();
+            calculateReturns();
+        });
+    </script>
+</body>
+</html>
